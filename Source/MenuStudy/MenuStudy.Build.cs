@@ -12,9 +12,11 @@ public class MenuStudy : ModuleRules
 		{
 			"Core",
 			"CoreUObject",
-			"Engine", "InputCore",
+			"Engine",
+			"InputCore",
 			"EnhancedInput",
-			"GameplayTags"
+			"GameplayTags",
+			"UMG"
 		});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
