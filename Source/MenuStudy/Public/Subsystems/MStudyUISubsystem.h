@@ -7,6 +7,7 @@
 #include "Widgets/Widget_ActivatableBase.h"
 #include "MStudyUISubsystem.generated.h"
 
+class UMStudyCommonButtonBase;
 class UWidget_ActivatableBase;
 class UWidget_PrimaryLayout;
 struct FGameplayTag;
@@ -17,6 +18,8 @@ enum class EAsyncPushWidgetState : uint8
 	AfterPush
 };
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnButtonDescriptionTextUpdated, UMStudyCommonButtonBase*, BroadcastingButton, FText, DescriptionText);
+
 /**
  * 
  */
@@ -26,6 +29,10 @@ class MENUSTUDY_API UMStudyUISubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 
 public:
+
+	UPROPERTY(BlueprintAssignable)
+	FOnButtonDescriptionTextUpdated OnButtonDescriptionTextUpdated;
+	
 	static UMStudyUISubsystem* Get(const UObject* WorldContextObject);
 
 	//~Begin USubsystem Interface
