@@ -3,9 +3,12 @@
 #include "Subsystems/MStudyUISubsystem.h"
 #include "Engine/AssetManager.h"
 #include "MStudyDebugHelper.h"
+#include "MStudyFunctionLibrary.h"
 #include "Widgets/Widget_ActivatableBase.h"
 #include "Widgets/Widget_PrimaryLayout.h"
 #include "Widgets/CommonActivatableWidgetContainer.h"
+#include "MStudyGameplayTags.h"
+#include "Widgets/Widget_ConfirmScreen.h"
 
 UMStudyUISubsystem* UMStudyUISubsystem::Get(const UObject* WorldContextObject)
 {
@@ -31,14 +34,14 @@ bool UMStudyUISubsystem::ShouldCreateSubsystem(UObject* Outer) const
 
 void UMStudyUISubsystem::RegisterPrimaryLayoutWidget(UWidget_PrimaryLayout* InCreatedWidget)
 {
-	check(InCreatedWidget);	
+	check(InCreatedWidget);
 	CreatedPrimaryLayout = InCreatedWidget;
 	Debug::Print(TEXT("Primary layout widget assigned"));
 }
 
 void UMStudyUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InStackTag,
-	TSoftClassPtr<UWidget_ActivatableBase> InSoftWidgetClass,
-	TFunction<void(EAsyncPushWidgetState, UWidget_ActivatableBase*)> AsyncPushStateCallback)
+                                                    TSoftClassPtr<UWidget_ActivatableBase> InSoftWidgetClass,
+                                                    TFunction<void(EAsyncPushWidgetState, UWidget_ActivatableBase*)> AsyncPushStateCallback)
 {
 	check(!InSoftWidgetClass.IsNull());
 
@@ -62,4 +65,22 @@ void UMStudyUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InStackT
 			AsyncPushStateCallback(EAsyncPushWidgetState::AfterPush, CreatedWidget);
 		})
 	);
+}
+
+void UMStudyUISubsystem::PushConfirmScreenToModalStackAsync(EConfirmScreenType InScreenType, const FText& InScreenTitle,
+                                                            const FText& InScreenMessage, TFunction<void(EConfirmScreenButtonType)> ButtonClickedCallback)
+{
+	UConfirmScreenInfoObject* CreatedInfoObject = UConfirmScreenInfoObject::CreateConfirmScreenInfo(InScreenTitle, InScreenMessage, InScreenType);
+
+	check(CreatedInfoObject);
+
+	PushSoftWidgetToStackAsync(MStudyGameplayTags::UI_WidgetStack_Modal, UMStudyFunctionLibrary::GetUiSoftWidgetClassByTag(MStudyGameplayTags::UI_Widget_ConfirmScreen),
+		[CreatedInfoObject, ButtonClickedCallback](EAsyncPushWidgetState InPushState, UWidget_ActivatableBase* PushedWidget)
+		{
+			if(InPushState == EAsyncPushWidgetState::OnCreatedBeforePush)
+			{
+				UWidget_ConfirmScreen* CreatedConfirmScreen = CastChecked<UWidget_ConfirmScreen>(PushedWidget);
+				CreatedConfirmScreen->InitConfirmScreen(CreatedInfoObject, ButtonClickedCallback);
+			}
+		});
 }

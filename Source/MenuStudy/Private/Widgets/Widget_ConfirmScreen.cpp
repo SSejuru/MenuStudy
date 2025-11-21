@@ -87,7 +87,6 @@ void UWidget_ConfirmScreen::InitConfirmScreen(const UConfirmScreenInfoObject* In
 			break;
 		case EConfirmScreenButtonType::Cancel:
 		case EConfirmScreenButtonType::Close:
-
 			InputActionRowHandle = ICommonInputModule::GetSettings().GetDefaultBackAction();
 			break;
 		}
