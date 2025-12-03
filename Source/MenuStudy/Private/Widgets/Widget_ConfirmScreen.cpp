@@ -82,9 +82,6 @@ void UWidget_ConfirmScreen::InitConfirmScreen(const UConfirmScreenInfoObject* In
 
 		switch (AvailableButtonInfo.ButtonType)
 		{
-		case EConfirmScreenButtonType::Confirm:
-			InputActionRowHandle = ICommonInputModule::GetSettings().GetDefaultClickAction();
-			break;
 		case EConfirmScreenButtonType::Cancel:
 		case EConfirmScreenButtonType::Close:
 			InputActionRowHandle = ICommonInputModule::GetSettings().GetDefaultBackAction();
@@ -93,7 +90,7 @@ void UWidget_ConfirmScreen::InitConfirmScreen(const UConfirmScreenInfoObject* In
 
 		UMStudyCommonButtonBase* AddedButton = DynamicEntryBox_Buttons->CreateEntry<UMStudyCommonButtonBase>();
 		AddedButton->SetButtonText(AvailableButtonInfo.ButtonTextToDisplay);
-		AddedButton->SetTriggeredInputAction(InputActionRowHandle);
+		AddedButton->SetTriggeringInputAction(InputActionRowHandle);
 		AddedButton->OnClicked().AddLambda(
 			[ClickedButtonCallback, AvailableButtonInfo, this]()
 			{

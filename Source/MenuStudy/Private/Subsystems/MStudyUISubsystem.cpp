@@ -36,7 +36,6 @@ void UMStudyUISubsystem::RegisterPrimaryLayoutWidget(UWidget_PrimaryLayout* InCr
 {
 	check(InCreatedWidget);
 	CreatedPrimaryLayout = InCreatedWidget;
-	Debug::Print(TEXT("Primary layout widget assigned"));
 }
 
 void UMStudyUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InStackTag,
@@ -53,7 +52,7 @@ void UMStudyUISubsystem::PushSoftWidgetToStackAsync(const FGameplayTag& InStackT
 			check(LoadedWidgetClass && CreatedPrimaryLayout);
 
 			UCommonActivatableWidgetContainerBase* WidgetStack = CreatedPrimaryLayout->GetWidgetStackByTag(InStackTag);
-
+			
 			UWidget_ActivatableBase* CreatedWidget = WidgetStack->AddWidget<UWidget_ActivatableBase>(
 				LoadedWidgetClass,
 				[AsyncPushStateCallback](UWidget_ActivatableBase& CreatedWidgetInstance)
