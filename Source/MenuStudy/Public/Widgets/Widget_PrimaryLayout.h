@@ -19,7 +19,6 @@ class MENUSTUDY_API UWidget_PrimaryLayout : public UCommonUserWidget
 	GENERATED_BODY()
 
 public:
-
 	UCommonActivatableWidgetContainerBase* GetWidgetStackByTag(const FGameplayTag& InTag) const;
 	
 protected:

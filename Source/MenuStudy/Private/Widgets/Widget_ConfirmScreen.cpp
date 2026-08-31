@@ -49,6 +49,8 @@ UConfirmScreenInfoObject* UConfirmScreenInfoObject::CreateConfirmScreenInfo(
 			InfoObject->AvailableScreenButtons.Add(CancelButtonInfo);
 			break;
 		}
+	default: 
+		break;
 	}
 
 	return InfoObject;
@@ -62,7 +64,7 @@ void UWidget_ConfirmScreen::InitConfirmScreen(const UConfirmScreenInfoObject* In
 	CommonTextBlock_Title->SetText(InScreenInfoObject->ScreenTitle);
 	CommonTextBlock_Message->SetText(InScreenInfoObject->ScreenMessage);
 
-	//Check if box has old buttons created previously
+	//Check if entry box has old buttons created previously
 	if (DynamicEntryBox_Buttons->GetNumEntries() != 0)
 	{
 		//Clearing the old buttons, the widget type for the entry box is specified in the child WBP
@@ -85,6 +87,8 @@ void UWidget_ConfirmScreen::InitConfirmScreen(const UConfirmScreenInfoObject* In
 		case EConfirmScreenButtonType::Cancel:
 		case EConfirmScreenButtonType::Close:
 			InputActionRowHandle = ICommonInputModule::GetSettings().GetDefaultBackAction();
+			break;
+		default: 
 			break;
 		}
 

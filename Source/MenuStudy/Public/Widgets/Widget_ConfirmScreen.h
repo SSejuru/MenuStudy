@@ -48,6 +48,8 @@ class MENUSTUDY_API UWidget_ConfirmScreen : public UWidget_ActivatableBase
 	GENERATED_BODY()
 
 public:
+	
+	//Gets Called outside of the class when the widget is constructed and before its pushed to the stack
 	void InitConfirmScreen(const UConfirmScreenInfoObject* InScreenInfoObject, TFunction<void(EConfirmScreenButtonType)> ClickedButtonCallback);
 	
 private:

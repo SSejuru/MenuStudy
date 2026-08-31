@@ -6,6 +6,7 @@
 #include "Widgets/Widget_ActivatableBase.h"
 #include "Widget_OptionsScreen.generated.h"
 
+class UMStudyCommonListView;
 class UMStudyTabListWidgetBase;
 class UOptionsDataRegistry;
 /**
@@ -15,7 +16,7 @@ UCLASS(Abstract, BlueprintType, meta = (DisableNativeTick))
 class MENUSTUDY_API UWidget_OptionsScreen : public UWidget_ActivatableBase
 {
 	GENERATED_BODY()
-
+	
 protected:
 	//~ Begin UUSerWidgetInterface
 	virtual void NativeOnInitialized() override;
@@ -38,6 +39,9 @@ private:
 	//**** Bound Widgets ****//
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<UMStudyTabListWidgetBase> TabListWidget_OptionsTabs;
+
+	UPROPERTY(meta=(BindWidget))
+	TObjectPtr<UMStudyCommonListView> CommonListView_OptionsList;
 	//**** Bound Widgets ****//
 
 	void OnResetBoundActionTriggered();
@@ -45,8 +49,7 @@ private:
 
 	UFUNCTION()
 	void OnOptionsTabSelected(FName TabID);
-
+	
 public:
 	UOptionsDataRegistry* GetDataRegistry();
-	
 };

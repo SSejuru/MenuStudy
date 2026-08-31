@@ -6,6 +6,7 @@
 #include "ICommonInputModule.h"
 #include "MStudyDebugHelper.h"
 #include "Input/CommonUIInputTypes.h"
+#include "Widgets/Components/MStudyCommonListView.h"
 #include "Widgets/Components/MStudyTabListWidgetBase.h"
 #include "Widgets/Options/OptionsDataRegistry.h"
 #include "Widgets/Options/DataObjects/ListDataObject_Collection.h"
@@ -16,8 +17,8 @@ void UWidget_OptionsScreen::NativeOnInitialized()
 
 	if(!ResetAction.IsNull())
 	{
-		ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(ResetAction, true, 
-	FSimpleDelegate::CreateUObject(this, &ThisClass::OnResetBoundActionTriggered)));
+		ResetActionHandle = RegisterUIActionBinding(FBindUIActionArgs(ResetAction,true,
+			FSimpleDelegate::CreateUObject(this, &ThisClass::OnResetBoundActionTriggered)));
 	}
 
 	RegisterUIActionBinding(FBindUIActionArgs(ICommonInputModule::GetSettings().GetDefaultBackAction(), true,
@@ -57,7 +58,15 @@ void UWidget_OptionsScreen::OnBackBoundActionTriggered()
 
 void UWidget_OptionsScreen::OnOptionsTabSelected(FName TabID)
 {
-	Debug::Print(TEXT("Tab Selected: ") + TabID.ToString());
+	TArray<UListDataObject_Base*> FoundListSourceItems = GetDataRegistry()->GetListSourceItemsByTabID(TabID);
+	CommonListView_OptionsList->SetListItems(FoundListSourceItems);
+	CommonListView_OptionsList->RequestRefresh();
+
+	if(CommonListView_OptionsList->GetNumItems() != 0)
+	{
+		CommonListView_OptionsList->NavigateToIndex(0);
+		CommonListView_OptionsList->SetSelectedIndex(0);
+	}
 }
 
 UOptionsDataRegistry* UWidget_OptionsScreen::GetDataRegistry()
